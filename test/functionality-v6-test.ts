@@ -526,6 +526,37 @@ describe('v6', () => {
     });
   });
 
+  describe('bad-character error', () => {
+    it('highlights each offending character in parseMessage', () => {
+      try {
+        // eslint-disable-next-line no-new
+        new Address6('2001:db8::g1');
+        throw new Error('expected Address6 constructor to throw');
+      } catch (e) {
+        (e as any).parseMessage.should.equal('2001:db8::<span class="parse-error">g</span>1');
+      }
+    });
+
+    it('escapes HTML characters in the highlighted characters', () => {
+      try {
+        // eslint-disable-next-line no-new
+        new Address6(`<>&"'::1`);
+        throw new Error('expected Address6 constructor to throw');
+      } catch (e) {
+        (e as any).parseMessage.should.equal(
+          [
+            '<span class="parse-error">&lt;</span>',
+            '<span class="parse-error">&gt;</span>',
+            '<span class="parse-error">&amp;</span>',
+            '<span class="parse-error">&quot;</span>',
+            '<span class="parse-error">&#39;</span>',
+            '::1',
+          ].join(''),
+        );
+      }
+    });
+  });
+
   describe('A teredo address', () => {
     const topic = new Address6('2001:0000:ce49:7601:e866:efff:62c3:fffe');
 

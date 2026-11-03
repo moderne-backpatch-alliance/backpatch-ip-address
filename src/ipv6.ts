@@ -861,7 +861,10 @@ export class Address6 {
         `Bad character${
           badCharacters.length > 1 ? 's' : ''
         } detected in address: ${badCharacters.join('')}`,
-        address.replace(constants6.RE_BAD_CHARACTERS, '<span class="parse-error">$1</span>'),
+        address.replace(
+          constants6.RE_BAD_CHARACTERS,
+          (character) => `<span class="parse-error">${helpers.escapeHtml(character)}</span>`,
+        ),
       );
     }
 

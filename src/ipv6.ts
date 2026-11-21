@@ -1200,7 +1200,9 @@ export class Address6 {
 
   // #region Attributes
   /**
-   * Returns true if the given address is in the subnet of the current address
+   * Returns true if the given address is in the subnet of the current address.
+   * An `Address4` is never in the subnet of an `Address6`; convert with
+   * `Address6.fromAddress4()` or `to4()` to compare across families.
    * @returns {boolean}
    */
   isInSubnet = common.isInSubnet;
@@ -1209,6 +1211,8 @@ export class Address6 {
    * Returns true if this address's host bits fall inside the given subnet,
    * ignoring this address's own subnet mask. See
    * {@link common.isHostInSubnet}.
+   * An `Address4` is never in the subnet of an `Address6`; convert with
+   * `Address6.fromAddress4()` or `to4()` to compare across families.
    * @returns {boolean}
    */
   isHostInSubnet = common.isHostInSubnet;

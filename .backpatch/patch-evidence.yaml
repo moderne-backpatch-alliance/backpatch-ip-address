@@ -1,6 +1,6 @@
 schema: osera-patch-evidence/0.1.0
 producer: moderne
-release: 10.2.3-backpatch-00003
+release: 10.2.3-backpatch-00004
 baseline: v10.2.2+backpatch.baseline
 fixes:
   - cve: CVE-2026-69192
@@ -26,12 +26,20 @@ fixes:
     basis: backport
     artifacts:
       - ip-address
-    note: "New in this release; upstream's fix in 10.7.1. It closes the advisory: ip-address: Address6 builds a parse diagnostic proportional to the input with no length bound, allowing a single long string to stall or crash the process."
+    note: "Carried from 10.2.3-backpatch-00003; upstream's fix in 10.7.1. It closes the advisory: ip-address: Address6 builds a parse diagnostic proportional to the input with no length bound, allowing a single long string to stall or crash the process."
+  - cve: CVE-2026-101912
+    upstream_fix_url: https://github.com/beaugunderson/ip-address/commit/1343629d57fea413644a5c9d41ff1e59619f3f28
+    advisory_url: https://nvd.nist.gov/vuln/detail/CVE-2026-101912
+    patch_commit_url: https://github.com/moderne-backpatch-alliance/backpatch-ip-address/compare/673b0ae~1...6b694e7
+    basis: adapted
+    artifacts:
+      - ip-address
+    note: "New in this release; upstream's fix in 10.7.1, adapted to 10.2.2. It closes the advisory: ip-address: isInSubnet() and isHostInSubnet() compare addresses of different families as if they shared an address space, allowing an allowlist check to admit an address outside its range."
 tests:
-  commit: ea16f83254553208beb18bedd810a66146126d4f
+  commit: 6b694e77c261f3b8f6a67374b910e03988b179ac
   command: npm ci --ignore-scripts at the tag, npm run docs, npm run build, npm pack --ignore-scripts, then mocha with the tested commit's test/ and .mocharc.yml in a harness whose src/ modules require the packed package's dist/, its JSON report turned into the JUnit report
   runtime: Node.js v22.23.2, npm 10.9.8, mocha 11.7.5, TypeScript 5.5.4, typedoc 0.28.19, macOS 27.2 arm64
-  report: ip-address-10.2.3-backpatch-00003-tests.zip
-  report_sha256: 855e6c98910892859f2e4af9a377675ea2384281a93b8fde2041d3bdda71c99c
+  report: ip-address-10.2.3-backpatch-00004-tests.zip
+  report_sha256: d7d7e46694f9be9dd9a9c5e6e00cc2946c4ff4842ac06c7cbe01a95160056f44
   result: pass
-  note: "upstream's mocha suite (test/**/*.ts through tsx, as .mocharc.yml says) against the packed package at the tested commit: 3574 tests, 3574 passed, 0 failed, 0 skipped. The CVE tests (test/functionality-v4-test.ts test/functionality-v6-test.ts), with this release's production lines reverted at the tested commit: 299 tests, 297 passed, 2 failed, 0 skipped; with them: 299 tests, 299 passed, 0 failed, 0 skipped. Built with npm run docs and npm run build (what prepack runs: README.md from the doc comments, tsc into dist/) in a directory named ip-address, 21 of npmjs's 30 files for 10.2.2 are identical; the rest are README.md, dist/ipv4.js, dist/ipv4.js.map, dist/ipv6.d.ts, dist/ipv6.js, dist/ipv6.js.map, dist/v4/constants.js, dist/v4/constants.js.map, package.json. The archive's file-origins.yaml maps each packaged file to the commit, or names its inputs and build."
+  note: "upstream's mocha suite (test/**/*.ts through tsx, as .mocharc.yml says) against the packed package at the tested commit: 3577 tests, 3577 passed, 0 failed, 0 skipped. The CVE tests (test/functionality-v6-test.ts), with this release's production lines reverted at the tested commit: 196 tests, 194 passed, 2 failed, 0 skipped; with them: 196 tests, 196 passed, 0 failed, 0 skipped. Built with npm run docs and npm run build (what prepack runs: README.md from the doc comments, tsc into dist/) in a directory named ip-address, 17 of npmjs's 30 files for 10.2.2 are identical; the rest are README.md, dist/common.d.ts, dist/common.js, dist/common.js.map, dist/ipv4.d.ts, dist/ipv4.js, dist/ipv4.js.map, dist/ipv6.d.ts, dist/ipv6.js, dist/ipv6.js.map, dist/v4/constants.js, dist/v4/constants.js.map, package.json. The archive's file-origins.yaml maps each packaged file to the commit, or names its inputs and build."

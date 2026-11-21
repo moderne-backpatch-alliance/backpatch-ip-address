@@ -1,6 +1,6 @@
 schema: osera-patch-evidence/0.1.0
 producer: moderne
-release: 10.2.3-backpatch-00005
+release: 10.2.3-backpatch-00006
 baseline: v10.2.2+backpatch.baseline
 fixes:
   - cve: CVE-2026-69192
@@ -42,12 +42,20 @@ fixes:
     basis: backport
     artifacts:
       - ip-address
-    note: "New in this release; upstream's fix in 10.5.1. It closes the advisory: ip-address: Address6.isLinkLocal() recognizes fe80::/64 rather than fe80::/10, allowing SSRF and trust-boundary bypass to on-link hosts."
+    note: "Carried from 10.2.3-backpatch-00005; upstream's fix in 10.5.1. It closes the advisory: ip-address: Address6.isLinkLocal() recognizes fe80::/64 rather than fe80::/10, allowing SSRF and trust-boundary bypass to on-link hosts."
+  - cve: CVE-2026-111997
+    upstream_fix_url: https://github.com/beaugunderson/ip-address/commit/ec80fcd5d7b97defecfd39717d782a9f9f8b89dd
+    advisory_url: https://nvd.nist.gov/vuln/detail/CVE-2026-111997
+    patch_commit_url: https://github.com/moderne-backpatch-alliance/backpatch-ip-address/compare/b5302e8~1...bff67a3
+    basis: backport
+    artifacts:
+      - ip-address
+    note: "New in this release; upstream's fix in 10.7.4. It closes the advisory: ip-address: Address6 matches a zone identifier in quadratic time ahead of its length limit, allowing a single long string to stall the process."
 tests:
-  commit: 749b78052d8e69ff95d7a639f44d616c9b44cfa2
+  commit: bff67a37ac6780748ba0f694fe78f32abf31bb41
   command: npm ci --ignore-scripts at the tag, npm run docs, npm run build, npm pack --ignore-scripts, then mocha with the tested commit's test/ and .mocharc.yml in a harness whose src/ modules require the packed package's dist/, its JSON report turned into the JUnit report
   runtime: Node.js v22.23.2, npm 10.9.8, mocha 11.7.5, TypeScript 5.5.4, typedoc 0.28.19, macOS 27.2 arm64
-  report: ip-address-10.2.3-backpatch-00005-tests.zip
-  report_sha256: a1d5a3fab0265c2bc913d31687b12f9827ed2ba9645af959713033937fe25b5c
+  report: ip-address-10.2.3-backpatch-00006-tests.zip
+  report_sha256: 5d94570f39f97b0a882514c9462238debf04b6169144fbd789a3994f892fc5da
   result: pass
-  note: "upstream's mocha suite (test/**/*.ts through tsx, as .mocharc.yml says) against the packed package at the tested commit: 3580 tests, 3580 passed, 0 failed, 0 skipped. The CVE tests (test/functionality-v6-test.ts), with this release's production lines reverted at the tested commit: 199 tests, 197 passed, 2 failed, 0 skipped; with them: 199 tests, 199 passed, 0 failed, 0 skipped. Built with npm run docs and npm run build (what prepack runs: README.md from the doc comments, tsc into dist/) in a directory named ip-address, 15 of npmjs's 30 files for 10.2.2 are identical; the rest are README.md, dist/common.d.ts, dist/common.js, dist/common.js.map, dist/ipv4.d.ts, dist/ipv4.js, dist/ipv4.js.map, dist/ipv6.d.ts, dist/ipv6.js, dist/ipv6.js.map, dist/v4/constants.js, dist/v4/constants.js.map, dist/v6/constants.js, dist/v6/constants.js.map, package.json. The archive's file-origins.yaml maps each packaged file to the commit, or names its inputs and build."
+  note: "upstream's mocha suite (test/**/*.ts through tsx, as .mocharc.yml says) against the packed package at the tested commit: 3582 tests, 3582 passed, 0 failed, 0 skipped. The CVE tests (test/common-test.ts test/functionality-v6-test.ts), with this release's production lines reverted at the tested commit: 202 tests, 201 passed, 1 failed, 0 skipped; with them: 202 tests, 202 passed, 0 failed, 0 skipped. Built with npm run docs and npm run build (what prepack runs: README.md from the doc comments, tsc into dist/) in a directory named ip-address, 14 of npmjs's 30 files for 10.2.2 are identical; the rest are README.md, dist/common.d.ts, dist/common.js, dist/common.js.map, dist/ipv4.d.ts, dist/ipv4.js, dist/ipv4.js.map, dist/ipv6.d.ts, dist/ipv6.js, dist/ipv6.js.map, dist/v4/constants.js, dist/v4/constants.js.map, dist/v6/constants.d.ts, dist/v6/constants.js, dist/v6/constants.js.map, package.json. The archive's file-origins.yaml maps each packaged file to the commit, or names its inputs and build."
